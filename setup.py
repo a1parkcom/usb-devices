@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
    name='UsbDevices',
@@ -6,6 +6,6 @@ setup(
    description='parking module',
    author='pysashapy',
    author_email='sasha.2000ibr@gmail.com',
-   packages=['UsbDevices'],
+   packages=find_packages(),
    install_requires=open('requirements.txt', 'r').read().split(),
 )
