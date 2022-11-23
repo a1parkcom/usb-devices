@@ -21,6 +21,12 @@ class SerialScanner(QRScannerABC):
     def is_open(self) -> bool:
         return self.ser.is_open
 
+    def open(self):
+        self.ser.open()
+
+    def close(self):
+        self.ser.close()
+
 
 class Scanner(Thread):
     def __init__(self, scanner: QRScannerABC, func=None):
@@ -30,7 +36,7 @@ class Scanner(Thread):
         self.func = func if func is not None else lambda e: None
 
     def run(self):
-        while self.is_alive():
+        while self.is_alive() and self.scanner.is_open():
             self.qr_code = self.scanner.read()
 
             if self.qr_code:
@@ -39,6 +45,9 @@ class Scanner(Thread):
             time.sleep(0.05)
 
             self.qr_code = b''
+        self.scanner.close()
+
+        print('Scanner connection closed, thread stopped')
 
     def code(self) -> bytes:
         return self.qr_code

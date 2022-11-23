@@ -11,5 +11,14 @@ class QRScannerABC(ABC):
     def read(self, *args, **kwargs) -> bytes:
         pass
 
+    @abstractmethod
+    def open(self):
+        pass
+
+    @abstractmethod
+    def close(self):
+        pass
+
+    @abstractmethod
     def is_open(self) -> bool:
         pass
