@@ -26,17 +26,19 @@ class Scanner(Thread):
     def __init__(self, scanner: QRScannerABC, func=None):
         super(Scanner, self).__init__()
         self.scanner = scanner
-        self.qr_code = None
+        self.qr_code = b''
         self.func = func if func is not None else lambda e: None
 
     def run(self):
         while self.is_alive():
             self.qr_code = self.scanner.read()
-            if self.qr_code is not None:
+
+            if self.qr_code:
                 self.func(self.qr_code)
-                self.qr_code = None
                 time.sleep(2)
             time.sleep(0.05)
+
+            self.qr_code = b''
 
     def code(self) -> bytes:
         return self.qr_code
