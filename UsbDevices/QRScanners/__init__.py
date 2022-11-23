@@ -15,7 +15,7 @@ class SerialScanner(QRScannerABC):
                                  bytesize=serial.EIGHTBITS,
                                  timeout=timeout)
 
-    def read(self, size=128) -> bytes:
+    def read(self, size=None) -> bytes:
         return self.ser.readline(size)
 
     def is_open(self) -> bool:
