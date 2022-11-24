@@ -1,9 +1,11 @@
 import time
+from typing import TextIO
 
 import serial
 
 from .ABC import QRScannerABC, TypeConnect
 from threading import Thread
+from io import TextIOBase
 
 
 class SerialScanner(QRScannerABC):
@@ -15,8 +17,8 @@ class SerialScanner(QRScannerABC):
                                  bytesize=serial.EIGHTBITS,
                                  timeout=timeout)
 
-    def read(self, size=None) -> bytes:
-        return self.ser.readline(size)
+    def read(self, size=None) -> str:
+        return self.ser.readline(size).decode('utf-8')
 
     def is_open(self) -> bool:
         return self.ser.is_open
@@ -26,6 +28,26 @@ class SerialScanner(QRScannerABC):
 
     def close(self):
         self.ser.close()
+
+
+class HIDPOSScanner(QRScannerABC):
+    def __init__(self, file_path: str):
+        self.file_path = file_path
+
+        self.f: TextIO = self.open()
+
+    def read(self, size=None) -> str:
+        return self.f.readline()
+
+    def is_open(self) -> bool:
+        return bool(self.f)
+
+    def open(self) -> TextIO:
+        return open(self.file_path, 'r')
+
+    def close(self):
+        if self.is_open():
+            self.f.close()
 
 
 class Scanner(Thread):
