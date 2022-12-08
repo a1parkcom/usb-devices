@@ -87,7 +87,7 @@ class Response:
         return self._xml
 
     def decode(self):
-        soup = BeautifulSoup(self.xml(), 'xml')
+        soup = BeautifulSoup(self.xml(), 'lxml')
 
         error = soup.find('errorcode')
         if error:
@@ -156,18 +156,7 @@ if __name__ == '__main__':
     now = time()
     resp = Response(
         """
-        <request>
-            <field id="00">100</field>
-            <field id="04">643</field>
-            <field id="21">20150729121815</field>
-            <field id="25">1</field>
-            <field id="26"></field>
-            <field id="27">00199991</field>
-            <field id="90">0102030405060708090a0b0c0d0e0f10</field>
-            <field id="39">1</field>
-            <ipaddr>192.168.0.2:9000</ipaddr>
-            <timeout>180</timeout>
-        </request>
+<?xml version="1.0" encoding="windows-1251" standalone="no"?><response><field id="19">ОПЕРАЦИЯ ОДОБРЕНА^APPROVED.JPG~</field><field id="21">20221208134836</field><field id="25">26</field><field id="27">00081270</field><field id="39">1</field></response>
         """
     )
     print(resp)

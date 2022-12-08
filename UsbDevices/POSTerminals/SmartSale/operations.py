@@ -63,4 +63,3 @@ class Refund:
         self.fields.add_field(Field(27, self.terminal_id))
 
 
-print(ConnectionCheck(99))
