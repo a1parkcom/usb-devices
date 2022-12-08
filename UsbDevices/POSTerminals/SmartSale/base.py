@@ -3,7 +3,7 @@ import requests
 from typing import List, Union
 from dataclasses import dataclass
 
-from codes import OperationsCodes, fields_id_name, fields_id, errors_id_name, transaction_status_name_id
+from .codes import OperationsCodes, fields_id_name, fields_id, errors_id_name, transaction_status_name_id
 
 from bs4 import BeautifulSoup
 from time import time
@@ -73,13 +73,18 @@ class Transaction:
     CONFIRMED = TransactionStatus(1)
 
 
+@dataclass
+class DataTicket:
+    pass
+
+
 class Response:
     def __init__(self, xml: str):
         self._xml = xml
 
         self._fields = None
         self._error = None
-        self._status = False
+        self._status = None
 
         self.decode()
 
@@ -91,8 +96,9 @@ class Response:
 
         error = soup.find('errorcode')
         if error:
-            self._status = False
             self._error = Error(int(error.text))
+            self._status = TransactionStatus(0)
+
             error_description = soup.find('errordescription')
             if error_description:
                 self._error.data = error_description.text
@@ -107,8 +113,11 @@ class Response:
     def fields(self) -> Fields:
         return self._fields
 
-    def status(self) -> bool:
+    def status(self) -> TransactionStatus:
         return self._status
+
+    def ticket(self) -> DataTicket:
+        raise Exception('ticket not implemented')
 
     def error(self):
         return self._error
@@ -136,28 +145,3 @@ class Query:
 
     def xml(self):
         return self.xml_base % (self._fields.xml())
-
-
-if __name__ == '__main__':
-    # fields = Fields(Field(1, 'test'), Field(4, 'test2'))
-    # query = Query(fields)
-    # print(query.xml())
-
-    # resp = Response(
-    #     """<?xml version="1.0" encoding="windows-1251" standalone="no"?>
-    #     <response>
-    #      <errorcode>4</errorcode>
-    #      <errordescription>REQUEST_ERROR</errordescription>
-    #     </response>
-    #     """
-    # )
-    #
-    # print(resp)
-    now = time()
-    resp = Response(
-        """
-<?xml version="1.0" encoding="windows-1251" standalone="no"?><response><field id="19">ОПЕРАЦИЯ ОДОБРЕНА^APPROVED.JPG~</field><field id="21">20221208134836</field><field id="25">26</field><field id="27">00081270</field><field id="39">1</field></response>
-        """
-    )
-    print(resp)
-    print(resp.status() == Transaction.CONFIRMED)

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from codes import CurrencyCode, OperationsCodes
-from base import Field, Fields, Query, Response
+from .codes import CurrencyCode, OperationsCodes
+from .base import Field, Fields, Query, Response
 
 
 class BaseTransaction:
@@ -23,7 +23,7 @@ class Payment(BaseTransaction):
 
     currency_code: int = CurrencyCode.RUB
     code_operation: int = OperationsCodes.sale
-    terminal_id: int = 123_123_123
+    terminal_id: str = '123123123'
 
     def __post_init__(self):
         self.fields = Fields()

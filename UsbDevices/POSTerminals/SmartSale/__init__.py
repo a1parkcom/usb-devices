@@ -1,8 +1,6 @@
-from abc import ABC, abstractmethod
-from typing import List
-
-import requests
-
+from .base import Transaction, Response, DataTicket
+from .operations import ConnectionCheck, Payment
+from .install import install
 # import requests
 # xml = """
 # <?xml version='1.0' encoding='utf-8'?>
@@ -15,56 +13,36 @@ import requests
 # print(requests.post('http://localhost:9015', data=xml, headers=headers).text)
 
 
-class TerminalABC(ABC):
-    @abstractmethod
-    def payment(self, *args, **kwargs):
+class SmartSale:
+    def __init__(self):
+
+        self._connect = False
+        self.terminal_id = '00001'
+        self.connection()
+
+    def is_connection(self):
+        return self._connect
+
+    def connection(self) -> tuple[bool, Response]:
+        query = ConnectionCheck().query()
+
+        self._connect = query.status() == Transaction.CONFIRMED
+        self.terminal_id = query.fields().find(27).data
+
+        out = (query.status() == Transaction.CONFIRMED, query)
+
+        self.callback_connect(*out)
+
+        return out
+
+    def pay(self, amount) -> tuple[bool, Response]:
+        query = Payment(amount=amount, terminal_id=self.terminal_id).query()
+        out = (query.status() == Transaction.CONFIRMED, query)
+        self.callback_pay(*out)
+        return out
+
+    def callback_pay(self, status: bool, response: Response):
         pass
 
-    @abstractmethod
-    def refund(self, *args, **kwargs):
+    def callback_connect(self, status: bool, response: Response):
         pass
-
-    @abstractmethod
-    def result(self, *args, **kwargs):
-        pass
-
-    @abstractmethod
-    def is_connection(self, *args, **kwargs):
-        pass
-
-    @abstractmethod
-    def receipt(self, *args, **kwargs):
-        pass
-
-
-class SmartSale(TerminalABC):
-    xml_base = f"<?xml version='1.0' encoding='utf-8'?>\n" \
-               f"<request>\n" \
-               f"%s\n" \
-               f"</request>\n"
-
-    def payment(self, *args, **kwargs):
-        pass
-
-    def refund(self, *args, **kwargs):
-        pass
-
-    def result(self, *args, **kwargs):
-        pass
-
-    def is_connection(self, *args, **kwargs):
-        pass
-
-    def receipt(self, *args, **kwargs):
-        pass
-
-    def field_xml(self, id_, data):
-        return f"<field id='{id_}'>{data}</field>"
-
-    def generate_xml(self, data: List) -> str:
-        return self.xml_base % ('\n'.join([self.field_xml(*field) for field in data]))
-
-    def request(self, xml: str) -> str:
-        data = requests.post('http://localhost:9015', data=xml,
-                             headers={'Content-Type': 'text/xml', 'Accept': 'text/xml'})
-        return data.text
