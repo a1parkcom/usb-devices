@@ -57,13 +57,13 @@ class Tickets:
    <text>{self.url}</text> 
    <text>Стоимость <b>{self.money_h}</b> Руб./час </text>
    <text>Сервисный сбор НОП 3% </text>
-   
+
    <text>К сожалению нет свободных мест,</text>
    <text>попробуйте чуть позже,</text>
    <text>как места появятся - обязательно</text>
    <text>вам сообщим!</text>
    <text>или позвоните в call центр,</text>
-   
+
    <text>Телефон для справок:</text> 
    <text><b>{self.phone}</b></text>
    <text><b>{self.email}</b></text>

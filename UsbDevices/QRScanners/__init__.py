@@ -54,22 +54,22 @@ class Scanner(Thread):
     def __init__(self, scanner: QRScannerABC, func=None):
         super(Scanner, self).__init__()
         self.scanner = scanner
-        self.qr_code = b''
+        self.qr_code = ''
         self.func = func if func is not None else lambda e: None
 
     def run(self):
         while self.is_alive() and self.scanner.is_open():
             self.qr_code = self.scanner.read()
+            self.func(self.qr_code)
 
-            if self.qr_code:
-                self.func(self.qr_code)
-                time.sleep(2)
-            time.sleep(0.05)
-
-            self.qr_code = b''
         self.scanner.close()
 
         print('Scanner connection closed, thread stopped')
 
-    def code(self) -> bytes:
+    def code(self) -> str:
         return self.qr_code
+
+
+if __name__ == '__main__':
+    sc = HIDPOSScanner('/dev/hidraw1')
+    print(sc.read())

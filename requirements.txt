@@ -1,3 +1,6 @@
 logdecorator==2.4
 python-escpos==2.2.0
 pyserial==3.5
+requests==2.28.1
+lxml
+beautifulsoup4==4.11.1
