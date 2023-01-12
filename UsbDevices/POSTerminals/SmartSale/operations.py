@@ -18,6 +18,17 @@ class BaseTransaction:
 
 
 @dataclass
+class ConnectionCheck(BaseTransaction):
+    code_operation: int = OperationsCodes.test_connect
+    terminal_id: int = 123_123_123
+
+    def __post_init__(self):
+        self.fields = Fields()
+        self.fields.add_field(Field(25, self.code_operation))
+        self.fields.add_field(Field(27, self.terminal_id))
+
+
+@dataclass
 class Payment(BaseTransaction):
     amount: int
 
@@ -36,30 +47,16 @@ class Payment(BaseTransaction):
 
 
 @dataclass
-class ConnectionCheck(BaseTransaction):
-    code_operation: int = OperationsCodes.test_connect
-    terminal_id: int = 123_123_123
-
-    def __post_init__(self):
-        self.fields = Fields()
-        self.fields.add_field(Field(25, self.code_operation))
-        self.fields.add_field(Field(27, self.terminal_id))
-
-
-@dataclass
-class Refund:
-    amount: int
-
-    currency_code: int = CurrencyCode.RUB
+class Refund(BaseTransaction):
+    transaction_number: int
     code_operation: int = OperationsCodes.emergency_cancel_sale
     terminal_id: int = 123_123_123
 
     def __post_init__(self):
         self.fields = Fields()
 
-        self.fields.add_field(Field(0, self.amount))
-        self.fields.add_field(Field(4, self.currency_code))
         self.fields.add_field(Field(25, self.code_operation))
+        self.fields.add_field(Field(26, self.transaction_number))
         self.fields.add_field(Field(27, self.terminal_id))
 
 
