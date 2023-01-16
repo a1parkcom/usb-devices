@@ -1,6 +1,11 @@
-from .base import Transaction, Response, DataTicket
-from .operations import ConnectionCheck, Payment
+import random
+
+from .base import Transaction, Response, DataTicket, TransactionStatus
+from .operations import ConnectionCheck, Payment, Refund, FixedPay
 from .install import install
+from .. import Response
+
+
 # import requests
 # xml = """
 # <?xml version='1.0' encoding='utf-8'?>
@@ -17,7 +22,9 @@ class SmartSale:
     def __init__(self):
 
         self._connect = False
-        self.terminal_id = '00001'
+        self.terminal_id = 1111
+        self.transaction_id = 0
+
         self.connection()
 
     def is_connection(self):
@@ -29,20 +36,28 @@ class SmartSale:
         self._connect = query.status() == Transaction.CONFIRMED
         self.terminal_id = query.fields().find(27).data
 
-        out = (query.status() == Transaction.CONFIRMED, query)
+        return query.status() == Transaction.CONFIRMED, query
 
-        self.callback_connect(*out)
+    def pay(self, amount, transaction_id) -> tuple[TransactionStatus, Response]:
+        query = Payment(amount=amount, transaction_id=transaction_id, terminal_id=self.terminal_id).query()
+        self.transaction_id = query.fields().find(26).data
+        return query.status(), query
 
-        return out
+    def refund(self):
+        if self.transaction_id is None:
+            raise Exception('Transaction_id is None')
+        query = Refund(transaction_id=self.transaction_id, terminal_id=self.terminal_id).query()
 
-    def pay(self, amount) -> tuple[bool, Response]:
-        query = Payment(amount=amount, terminal_id=self.terminal_id).query()
-        out = (query.status() == Transaction.CONFIRMED, query)
-        self.callback_pay(*out)
-        return out
+        return query.status(), query
 
-    def callback_pay(self, status: bool, response: Response):
-        pass
+    def fixed_pay(self, transaction_id):
+        query = FixedPay(transaction_id=transaction_id).query()
+        self.transaction_id = None
+        return query.status(), query
 
-    def callback_connect(self, status: bool, response: Response):
-        pass
+
+    # def callback_pay(self, status: bool, response: Response):
+    #     pass
+    #
+    # def callback_connect(self, status: bool, response: Response):
+    #     pass
