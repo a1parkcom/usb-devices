@@ -1,5 +1,4 @@
-from SmartSale.operations import ConnectionCheck, Payment, Refund
+from SmartSale import SmartSale
 
-print(ConnectionCheck().query())
-query = Payment(100).query()
-print(query)
+sm = SmartSale()
+print(sm.is_connection())

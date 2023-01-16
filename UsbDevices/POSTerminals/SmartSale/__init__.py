@@ -3,7 +3,6 @@ import random
 from .base import Transaction, Response, DataTicket, TransactionStatus
 from .operations import ConnectionCheck, Payment, Refund, FixedPay
 from .install import install
-from .. import Response
 
 
 # import requests
