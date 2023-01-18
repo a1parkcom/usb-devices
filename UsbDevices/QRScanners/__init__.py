@@ -31,7 +31,7 @@ class SerialScanner(QRScannerABC):
 
 
 class HIDPOSScanner(QRScannerABC):
-    def __init__(self, file_path: str):
+    def __init__(self, file_path: str='/dev/hidraw0'):
         self.file_path = file_path
 
         self.f: TextIO = self.open()
