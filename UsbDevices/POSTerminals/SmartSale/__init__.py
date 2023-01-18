@@ -34,7 +34,9 @@ class SmartSale:
         query = ConnectionCheck().query()
 
         self._connect = query.status() == Transaction.CONFIRMED
-        self.terminal_id = query.fields().find(27).data
+
+        if self._connect:
+            self.terminal_id = query.fields().find(27).data
 
         return query.status() == Transaction.CONFIRMED, query
 
