@@ -1,12 +1,16 @@
 import requests
 
+from time import time, strftime
 from typing import List, Union
 from dataclasses import dataclass
 
 from .codes import OperationsCodes, fields_id_name, fields_id, errors_id_name, transaction_status_name_id
 
 from bs4 import BeautifulSoup
-from time import time
+
+
+def time_smsale():
+    return strftime('%Y%m%d%H%M%S')
 
 
 @dataclass
