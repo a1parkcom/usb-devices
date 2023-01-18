@@ -8,7 +8,7 @@ class TypeConnect:
 
 class QRScannerABC(ABC):
     @abstractmethod
-    def read(self, *args, **kwargs) -> bytes:
+    def read(self, *args, **kwargs) -> str:
         pass
 
     @abstractmethod
