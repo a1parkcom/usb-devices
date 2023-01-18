@@ -34,9 +34,9 @@ class Payment(BaseTransaction):
     amount: int
     transaction_id: int
 
+    terminal_id: int = 123_123_123
     currency_code: int = CurrencyCode.RUB
     code_operation: int = OperationsCodes.sale
-    terminal_id: int = 123_123_123
 
     def __post_init__(self):
         self.fields = Fields()
@@ -52,13 +52,16 @@ class Payment(BaseTransaction):
 class Refund(BaseTransaction):
     amount: int
     transaction_id: int
-    code_operation: int = OperationsCodes.emergency_cancel_sale
+    currency_code: int = CurrencyCode.RUB
     terminal_id: int = 123_123_123
+
+    code_operation: int = OperationsCodes.emergency_cancel_sale
 
     def __post_init__(self):
         self.fields = Fields()
 
         self.fields.add_field(Field(0, self.amount))
+        self.fields.add_field(Field(4, self.currency_code))
         self.fields.add_field(Field(25, self.code_operation))
         self.fields.add_field(Field(26, self.transaction_id))
         self.fields.add_field(Field(27, self.terminal_id))
