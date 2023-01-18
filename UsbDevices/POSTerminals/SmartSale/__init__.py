@@ -25,8 +25,6 @@ class SmartSale:
         self.transaction_id = 0
         self.last_amount = 0
 
-        self.connection()
-
     def is_connection(self):
         return self._connect
 
@@ -62,6 +60,8 @@ class SmartSale:
         self.transaction_id = None
         return query.status(), query
 
+    def __call__(self, *args, **kwargs):
+        return self.connection()
 
     # def callback_pay(self, status: bool, response: Response):
     #     pass
