@@ -23,8 +23,7 @@ class SmartSale:
         self._connect = False
         self.terminal_id = 1111
         self.transaction_id = 0
-
-        self.connection()
+        self.last_amount = 0
 
     def is_connection(self):
         return self._connect
@@ -33,19 +32,26 @@ class SmartSale:
         query = ConnectionCheck().query()
 
         self._connect = query.status() == Transaction.CONFIRMED
-        self.terminal_id = query.fields().find(27).data
+
+        if self._connect:
+            self.terminal_id = query.fields().find(27).data
 
         return query.status() == Transaction.CONFIRMED, query
 
     def pay(self, amount, transaction_id) -> tuple[TransactionStatus, Response]:
-        query = Payment(amount=amount, transaction_id=transaction_id, terminal_id=self.terminal_id).query()
+        query = Payment(amount=amount,
+                        transaction_id=transaction_id,
+                        terminal_id=self.terminal_id).query()
         self.transaction_id = query.fields().find(26).data
+        self.last_amount = amount
         return query.status(), query
 
     def refund(self):
         if self.transaction_id is None:
             raise Exception('Transaction_id is None')
-        query = Refund(transaction_id=self.transaction_id, terminal_id=self.terminal_id).query()
+        query = Refund(amount=self.last_amount,
+                       transaction_id=self.transaction_id,
+                       terminal_id=self.terminal_id).query()
 
         return query.status(), query
 
@@ -54,6 +60,8 @@ class SmartSale:
         self.transaction_id = None
         return query.status(), query
 
+    def __call__(self, *args, **kwargs):
+        return self.connection()
 
     # def callback_pay(self, status: bool, response: Response):
     #     pass
