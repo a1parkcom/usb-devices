@@ -8,25 +8,19 @@ class Tickets:
 
         self.url = f''
 
-    def set_ticket_data(self, ticket: str, order) -> str:
+    def ticket(self, ticket: str, order) -> str:
         data = {
             "order_car": order.car_number,
+            "order_id": order.id,
             "nop": 3,
             "data": time.strftime("%d.%m.%y"),
             "time": time.strftime("%H:%M"),
+            "url": order.pay_url
         }
-        default = {
-            "order_car": None,
-            "order_id": None,
-            "price": None,
-            "nop": None,
-            "data": time.strftime("%d.%m.%y"),
-            "time": time.strftime("%H:%M"),
-        }
-        return ticket.format(**default)
+        return ticket.format(**data)
 
     def ok(self, order):
-        return self.set_ticket_data(self.ticket_ok, order)
+        return self.ticket(self.ticket_ok, order)
 
     def not_space(self, order):
-        return self.set_ticket_data(self.ticket_space, order)
+        return self.ticket(self.ticket_space, order)
