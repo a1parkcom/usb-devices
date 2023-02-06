@@ -55,12 +55,16 @@ class Scanner(Thread):
         super(Scanner, self).__init__()
         self.scanner = scanner
         self.qr_code = ''
-        self.func = func if func is not None else lambda e: None
+        self.func = func
+        self.start()
 
     def run(self):
         while self.is_alive() and self.scanner.is_open():
             self.qr_code = self.scanner.read()
-            self.func(self.qr_code)
+            if self.qr_code:
+                if callable(self.func):
+                    self.func(self.qr_code)
+                    time.sleep(2)
 
         self.scanner.close()
 
