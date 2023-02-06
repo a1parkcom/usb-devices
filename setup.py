@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
    name='UsbDevices',
-   version='1.3.0',
+   version='1.3.1',
    description='parking module',
    author='pysashapy',
    author_email='sasha.2000ibr@gmail.com',
