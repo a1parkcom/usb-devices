@@ -9,10 +9,11 @@ from ..PHTML import HTMLtoPOS
 from ..Core.status import PaperStatus
 
 
-class Printer(VKP80III):
+class Printer(VKP80III, HTMLtoPOS):
     def __init__(self, *args, paper_file='', **kwargs):
         VKP80III.__init__(self, *args, **kwargs)
-        self.html = HTMLtoPOS(constants=constants)
+        HTMLtoPOS.__init__(self, constants=constants)
+
         self.paper_file = paper_file
 
     @log_on_start(logging.INFO, 'Печать чека')
