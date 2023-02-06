@@ -84,7 +84,6 @@ class Scanner(Thread):
             if self.qr_code:
                 if callable(self.func):
                     self.func(self.qr_code)
-                    time.sleep(2)
 
         self.scanner.close()
 
