@@ -10,13 +10,13 @@ class Tickets:
 
     def ticket(self, ticket: str, order) -> str:
         data = {
-            "order_car": order.car_number,
+            "order_car": order.car,
             "order_id": order.id,
-            "nop": 3,
             "data": time.strftime("%d.%m.%y"),
             "time": time.strftime("%H:%M"),
             "url": order.pay_url
         }
+
         return ticket.format(**data)
 
     def ok(self, order):
