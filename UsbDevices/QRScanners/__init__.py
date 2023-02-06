@@ -50,6 +50,26 @@ class HIDPOSScanner(QRScannerABC):
             self.f.close()
 
 
+class TestScanner(QRScannerABC):
+    def __init__(self, file_path: str='/dev/hidraw0'):
+        self.file_path = file_path
+
+        self.f: TextIO = self.open()
+
+    def read(self, size=None) -> str:
+        return self.f.readline()
+
+    def is_open(self) -> bool:
+        return bool(self.f)
+
+    def open(self) -> TextIO:
+        return open(self.file_path, 'r')
+
+    def close(self):
+        if self.is_open():
+            self.f.close()
+
+
 class Scanner(Thread):
     def __init__(self, scanner: QRScannerABC, func=None):
         super(Scanner, self).__init__()

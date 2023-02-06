@@ -24,6 +24,7 @@ class SmartSale:
         self.terminal_id = 1111
         self.transaction_id = 0
         self.last_amount = 0
+        self.connection()
 
     def is_connection(self):
         return self._connect
