@@ -63,6 +63,11 @@ class Error:
     def __post_init__(self):
         self.description = errors_id_name.get(self.code, 'None')
 
+    def __eq__(self, other):
+        if isinstance(other, Error):
+            return self.code == other.code
+        return False
+
 
 @dataclass
 class TransactionStatus:
@@ -72,9 +77,19 @@ class TransactionStatus:
     def __post_init__(self):
         self.description = transaction_status_name_id.get(self.code, 'None')
 
+    def __eq__(self, other):
+        if isinstance(other, TransactionStatus):
+            return self.code == other.code
+        return False
+
 
 class Transaction:
     CONFIRMED = TransactionStatus(1)
+    NOT_FOUND = Error(13)
+    TIME_OUT = TransactionStatus(1)
+    NOT_CONFIRMED = TransactionStatus(16)
+    NOT_CONNECTED = TransactionStatus(34)
+    TRANSACTION_CLOSED = TransactionStatus(53)
 
 
 @dataclass
