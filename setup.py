@@ -1,4 +1,10 @@
 from setuptools import setup, find_packages
+from sys import platform
+
+
+requires = open('requirements.txt', 'r').read().split()
+if platform.lower().find('linux'):
+   requires.append('evdev==1.6.1')
 
 setup(
    name='UsbDevices',
@@ -7,7 +13,7 @@ setup(
    author='pysashapy',
    author_email='sasha.2000ibr@gmail.com',
    packages=find_packages(),
-   install_requires=open('requirements.txt', 'r').read().split(),
+   install_requires=requires,
    entry_points={
       'console_scripts': [
          'smartsale = UsbDevices.POSTerminals.SmartSale:install',
