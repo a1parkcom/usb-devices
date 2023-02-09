@@ -1,2 +1,2 @@
-from . import POSTerminals
+from . import POSTerminals, QRScanners
 from .Printers import Printers, Tickets

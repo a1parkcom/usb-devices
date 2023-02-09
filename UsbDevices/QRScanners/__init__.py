@@ -1,14 +1,17 @@
 import time
 from typing import TextIO
+from threading import Thread
 
+import evdev
 import serial
+from evdev import InputDevice, categorize, ecodes
+
 
 from .ABC import QRScannerABC, TypeConnect
-from threading import Thread
-from io import TextIOBase
+from .encodings import Mindeo
 
 
-class SerialScanner(QRScannerABC):
+class SerialBase(QRScannerABC):
     def __init__(self, port: str, baudrate=9600, timeout=0):
         self.ser = serial.Serial(port,
                                  baudrate=baudrate,
@@ -30,7 +33,7 @@ class SerialScanner(QRScannerABC):
         self.ser.close()
 
 
-class HIDPOSScanner(QRScannerABC):
+class HIDPOSBase(QRScannerABC):
     def __init__(self, file_path: str='/dev/hidraw0'):
         self.file_path = file_path
 
@@ -50,8 +53,45 @@ class HIDPOSScanner(QRScannerABC):
             self.f.close()
 
 
+class HIDPOSEventBase(QRScannerABC):
+
+    def __init__(self, event_path='/dev/input/event7'):
+
+        self.event_path = event_path
+        self.dev = self.open()
+
+    def read(self, *args, **kwargs) -> str:
+        x = ''
+        caps = False
+
+        for event in self.dev.read_loop():
+            if event.type == ecodes.EV_KEY:
+                data = categorize(event)
+
+                if data.scancode == 42:
+                    caps = bool(data.keystate)
+
+                elif data.scancode == 28:
+                    return x
+
+                elif data.keystate == 1:
+                    x += '{}'.format(Mindeo().get(caps, data.scancode))
+
+    def open(self) -> InputDevice:
+        self.dev = InputDevice(self.event_path)
+        self.dev.grab()
+        return self.dev
+
+    def close(self):
+        self.dev.close()
+        self.dev = None
+
+    def is_open(self) -> bool:
+        return self.dev is not None
+
+
 class TestScanner(QRScannerABC):
-    def __init__(self, file_path: str='/dev/hidraw0'):
+    def __init__(self, file_path: str='scannerdata'):
         self.file_path = file_path
 
         self.f: TextIO = self.open()
@@ -94,5 +134,5 @@ class Scanner(Thread):
 
 
 if __name__ == '__main__':
-    sc = HIDPOSScanner('/dev/hidraw1')
+    sc = HIDPOSBase('/dev/hidraw1')
     print(sc.read())
