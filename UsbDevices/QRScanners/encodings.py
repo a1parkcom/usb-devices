@@ -30,7 +30,7 @@ class BaseCodes:
     }
 
     def get(self, caps: bool, char_code):
-        return [self.upper, self.lower][caps][char_code]
+        return [self.lower, self.upper][caps][char_code]
 
 
 class Mindeo(BaseCodes):
