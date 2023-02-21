@@ -123,6 +123,7 @@ class Scanner(Thread):
             self.qr_code = self.scanner.read()
             if self.qr_code:
                 if callable(self.func):
+                    print(self.qr_code)
                     self.func(self.qr_code)
 
         self.scanner.close()
