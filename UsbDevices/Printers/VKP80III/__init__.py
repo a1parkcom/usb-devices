@@ -20,7 +20,6 @@ class Printer(VKP80III, HTMLtoPOS):
     def print(self, text, present_command):
         self.feed(text)
         present_command()
-        self.save_paper_state()
 
     def save_paper_state(self):
         status = self.paper_status()
