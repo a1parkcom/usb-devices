@@ -40,7 +40,8 @@ class HIDPOSBase(QRScannerABC):
         self.f: TextIO = self.open()
 
     def read(self, size=None) -> str:
-        return self.f.readline()
+        data = self.f.readline().decode('utf-8').strip()
+        return data[data[0] != 'h'::]
 
     def is_open(self) -> bool:
         return bool(self.f)
