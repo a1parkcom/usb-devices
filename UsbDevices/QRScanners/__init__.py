@@ -21,7 +21,8 @@ class SerialBase(QRScannerABC):
                                  timeout=timeout)
 
     def read(self, size=None) -> str:
-        return self.ser.readline(size).decode('utf-8')
+        data = self.ser.readline(size).decode('utf-8').strip()
+        return data[data[0] != 'h'::]
 
     def is_open(self) -> bool:
         return self.ser.is_open
@@ -40,8 +41,8 @@ class HIDPOSBase(QRScannerABC):
         self.f: TextIO = self.open()
 
     def read(self, size=None) -> str:
-        data = self.f.readline().decode('utf-8').strip()
-        return data[data[0] != 'h'::]
+        data = self.f.readline()
+        return data
 
     def is_open(self) -> bool:
         return bool(self.f)
