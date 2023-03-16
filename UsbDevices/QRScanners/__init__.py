@@ -22,7 +22,9 @@ class SerialBase(QRScannerABC):
 
     def read(self, size=None) -> str:
         data = self.ser.readline(size).decode('utf-8').strip()
-        return data[data[0] != 'h'::]
+        if data:
+            return data[data[0] != 'h'::]
+        return ''
 
     def is_open(self) -> bool:
         return self.ser.is_open
