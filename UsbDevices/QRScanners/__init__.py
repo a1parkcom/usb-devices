@@ -125,9 +125,8 @@ class Scanner(Thread):
     def run(self):
         while self.is_alive() and self.scanner.is_open():
             self.qr_code = self.scanner.read()
-            if self.qr_code:
+            if isinstance(self.qr_code, str) and self.qr_code:
                 if callable(self.func):
-                    print(self.qr_code)
                     self.func(self.qr_code)
 
         self.scanner.close()
