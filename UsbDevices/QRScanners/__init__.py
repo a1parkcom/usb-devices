@@ -1,11 +1,9 @@
+import logging
 import time
 from typing import TextIO
 from threading import Thread
 
-import evdev
 import serial
-from evdev import InputDevice, categorize, ecodes
-
 
 from .ABC import QRScannerABC, TypeConnect
 from .encodings import Mindeo
@@ -60,6 +58,11 @@ class HIDPOSBase(QRScannerABC):
 class HIDPOSEventBase(QRScannerABC):
 
     def __init__(self, event_path='/dev/input/event7'):
+        try:
+            import evdev
+            from evdev import InputDevice, categorize, ecodes
+        except ModuleNotFoundError as e:
+            logging.critical('Please install evdev module')
 
         self.event_path = event_path
         self.dev = self.open()
