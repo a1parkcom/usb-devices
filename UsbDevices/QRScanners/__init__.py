@@ -63,6 +63,7 @@ class HIDPOSEventBase(QRScannerABC):
             from evdev import InputDevice, categorize, ecodes
         except ModuleNotFoundError as e:
             logging.critical('Please install evdev module')
+            exit()
 
         self.event_path = event_path
         self.dev = self.open()
@@ -84,7 +85,7 @@ class HIDPOSEventBase(QRScannerABC):
                 elif data.keystate == 1:
                     x += '{}'.format(Mindeo().get(caps, data.scancode))
 
-    def open(self) -> InputDevice:
+    def open(self):
         self.dev = InputDevice(self.event_path)
         self.dev.grab()
         return self.dev
