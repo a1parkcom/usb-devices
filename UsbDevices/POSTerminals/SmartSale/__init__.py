@@ -43,7 +43,8 @@ class SmartSale:
         query = Payment(amount=amount,
                         transaction_id=transaction_id,
                         terminal_id=self.terminal_id).query()
-        self.transaction_id = query.fields().find(26).data
+        if query.error() is None:
+            self.transaction_id = query.fields().find(26).data
         self.last_amount = amount
         return query.status(), query
 

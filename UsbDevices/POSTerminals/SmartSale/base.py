@@ -122,6 +122,7 @@ class Response:
             if error_description:
                 self._error.data = error_description.text
         else:
+            self._error = None
             _status = soup.find('field', {'id': 39})
             self._status = TransactionStatus(int(_status.text) if _status else 0)
 
