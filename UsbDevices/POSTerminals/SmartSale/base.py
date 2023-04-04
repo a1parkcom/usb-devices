@@ -158,9 +158,12 @@ class Query:
                         f"%s\n" \
                         f"</request>\n"
 
+        self.session = requests.Session()
+        self.session.headers.pop('Accept-Encoding')
+        self.session.headers.update({'Content-Type': 'text/xml', 'Accept': 'text/xml'})
+
     def request(self) -> Response:
-        xml = requests.post(self._address, data=self.xml(),
-                            headers={'Content-Type': 'text/xml', 'Accept': 'text/xml'}).text
+        xml = requests.post(self._address, data=self.xml()).text
         return Response(xml)
 
     def xml(self):
