@@ -163,7 +163,7 @@ class Query:
         self.session.headers.update({'Content-Type': 'text/xml', 'Accept': 'text/xml'})
 
     def request(self) -> Response:
-        xml = requests.post(self._address, data=self.xml()).text
+        xml = self.session.post(self._address, data=self.xml()).text
         return Response(xml)
 
     def xml(self):
