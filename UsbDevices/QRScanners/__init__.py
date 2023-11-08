@@ -19,9 +19,12 @@ class SerialBase(QRScannerABC):
                                  timeout=timeout)
 
     def read(self, size=None) -> str:
-        data = self.ser.readline(size).decode('utf-8').strip()
-        if data:
-            return data[data[0] != 'h'::]
+        try:
+            data = self.ser.readline(size).decode('utf-8').strip()
+            if data:
+                return data[data[0] != 'h'::]
+        except:
+            pass
         return ''
 
     def is_open(self) -> bool:

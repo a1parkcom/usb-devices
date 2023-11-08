@@ -10,13 +10,13 @@ from ..Core.status import Paper
 from ..Core.utils import dec_to_hex
 
 
-class VKP80III(Usb):
+class VKP80II(Usb):
     @log_on_error(logging.CRITICAL, "Принтер не найден!!!"
                                     "(idVendor={idVendor}, idProduct={idProduct}, in_ep={in_ep}, out_ep={out_ep})",
                   on_exceptions=(USBNotFoundError, NoBackendError),
                   reraise=False)
     def __init__(self, idVendor=0x0dd4, idProduct=0x0205, timeout=0, in_ep=0x81, out_ep=0x02, *args, **kwargs):
-        super(VKP80III, self).__init__(idVendor, idProduct, timeout, in_ep, out_ep, *args, **kwargs)
+        super(VKP80II, self).__init__(idVendor, idProduct, timeout, in_ep, out_ep, *args, **kwargs)
         self.idVendor = idVendor
         self.idProduct = idProduct
         self.in_ep = in_ep
