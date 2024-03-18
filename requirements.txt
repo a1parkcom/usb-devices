@@ -1,5 +1,5 @@
 logdecorator==2.4
-python-escpos==3.0a9
+git+https://github.com/pysashapy/python-escpos.git@a1park_master
 pyserial==3.5
 requests==2.28.1
 lxml

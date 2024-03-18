@@ -69,12 +69,11 @@ class Refund(BaseTransaction):
 
 @dataclass
 class FixedPay(BaseTransaction):
-    transaction_id: int
+    terminal_id: int
     code_operation: int = OperationsCodes.reconciliation_of_results
 
     def __post_init__(self):
         self.fields = Fields()
 
-        self.fields.add_field(Field(21, time_smsale()))
         self.fields.add_field(Field(25, self.code_operation))
-        self.fields.add_field(Field(26, self.transaction_id))
+        self.fields.add_field(Field(27, self.terminal_id))

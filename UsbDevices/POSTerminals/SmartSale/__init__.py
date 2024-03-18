@@ -57,8 +57,8 @@ class SmartSale:
 
         return query.status(), query
 
-    def fixed_pay(self, transaction_id):
-        query = FixedPay(transaction_id=transaction_id).query()
+    def fixed_pay(self, *args, **kwargs):
+        query = FixedPay(terminal_id=self.terminal_id).query()
         self.transaction_id = None
         return query.status(), query
 
