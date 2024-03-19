@@ -19,5 +19,8 @@ setup(
         'console_scripts': [
             'smartsale = UsbDevices.POSTerminals.SmartSale:install',
         ]
-    }
+    },
+    dependency_links=[
+        'git+https://github.com/pysashapy/python-escpos.git@a1park_master'
+    ]
 )
