@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 from sys import platform
 
 
-requires = open('requirements.txt', 'r').read().split()
+requires = open('requirements.txt', 'r').read().split('\n')
 if platform.lower().find('linux') != -1:
     requires.append('evdev==1.6.1')
 
