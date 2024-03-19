@@ -71,9 +71,11 @@ class Refund(BaseTransaction):
 class FixedPay(BaseTransaction):
     terminal_id: int
     code_operation: int = OperationsCodes.reconciliation_of_results
+    name: str = 'IM20'
 
     def __post_init__(self):
         self.fields = Fields()
 
         self.fields.add_field(Field(25, self.code_operation))
         self.fields.add_field(Field(27, self.terminal_id))
+        self.fields.add_field(Field(89, self.name))
