@@ -28,21 +28,21 @@ from .install import install
 #
 # headers = {'Content-Type': 'text/xml', 'Accept': 'text/xml'}
 # print(requests.post('http://localhost:9015', data=xml, headers=headers).text)
-import requests
-from random import randint
-xml = f"""
-<?xml version='1.0' encoding='utf-8'?>
-<request>
-<field id="0">100</field>
-<field id="4">643</field>
-<field id="25">1</field>
-<field id="26">{randint(1000, 100000)}</field>
-<field id="27">00340036</field>
-</request>
-"""
-
-headers = {'Content-Type': 'text/xml', 'Accept': 'text/xml'}
-print(requests.post('http://localhost:9015', data=xml, headers=headers).text)
+# import requests
+# from random import randint
+# xml = f"""
+# <?xml version='1.0' encoding='utf-8'?>
+# <request>
+# <field id="0">100</field>
+# <field id="4">643</field>
+# <field id="25">1</field>
+# <field id="26">{randint(1000, 100000)}</field>
+# <field id="27">00340036</field>
+# </request>
+# """
+#
+# headers = {'Content-Type': 'text/xml', 'Accept': 'text/xml'}
+# print(requests.post('http://localhost:9015', data=xml, headers=headers).text)
 
 
 class SmartSale:
