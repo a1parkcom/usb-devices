@@ -9,7 +9,7 @@ if platform.lower().find('linux') != -1:
 
 setup(
     name='UsbDevices',
-    version='1.5.0a14',
+    version='1.5.0a15',
     description='parking module',
     author='pysashapy',
     author_email='sasha.2000ibr@gmail.com',

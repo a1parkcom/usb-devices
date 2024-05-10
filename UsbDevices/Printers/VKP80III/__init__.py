@@ -16,7 +16,7 @@ class Printer(VKP80III, HTMLtoPOS):
 
         self.paper_file = paper_file
 
-    @log_on_start(logging.INFO, 'Печать чека')
+    @log_on_start(logging.DEBUG, 'Печать чека')
     def print(self, text, present_command):
         self.feed(text)
         present_command()
@@ -27,7 +27,7 @@ class Printer(VKP80III, HTMLtoPOS):
             paper_status_.write(str(2-(status.paper+status.abundance)))
 
     @log_on_start(logging.DEBUG, "Ожидание взятия чека")
-    @log_on_end(logging.INFO, "Ожидание взятия чека завершилось с {result}")
+    @log_on_end(logging.DEBUG, "Ожидание взятия чека завершилось с {result}")
     def isTakeCheque(self, time_: int) -> bool:
         start_time = time.perf_counter() + time_
 
@@ -35,7 +35,7 @@ class Printer(VKP80III, HTMLtoPOS):
             return self.waitTicketState(PaperStatus.not_ticket_present, start_time)
         return False
 
-    @log_on_end(logging.NOTSET, "Ожидание {state} завершилось {result}")
+    @log_on_end(logging.DEBUG, "Ожидание {state} завершилось {result}")
     def waitTicketState(self, state, time_perf):
         while time_perf > time.perf_counter():
             if self.isTicketPresent() == state:

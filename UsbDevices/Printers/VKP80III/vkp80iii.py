@@ -56,7 +56,7 @@ class VKP80III(Usb):
         """
         self.raw_decimal([28, 80])
 
-    @log_on_end(logging.INFO,
+    @log_on_end(logging.DEBUG,
                 "Present paper steps: int = {steps}, blink: bool = {blink}, out: str = {out}, out_delay={out_delay}")
     def present(self, steps: int = 4, blink: bool = True, out: str = 'R', out_delay=10):
         """
@@ -77,7 +77,7 @@ class VKP80III(Usb):
     def retract(self):
         self.raw_decimal([29, 101, 2])
 
-    @log_on_end(logging.NOTSET, "Get paper status: {result}")
+    @log_on_end(logging.DEBUG, "Get paper status: {result}")
     def paper_status(self, bit_by_bit=PAPER_STATUS_VKP80III) -> Paper:
         full_status = self._stread('\x10\x04\x14')
         if ord(full_status[0]) != 16 and ord(full_status[1]) != 15:
