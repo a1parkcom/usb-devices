@@ -2,9 +2,10 @@ import time
 
 
 class Tickets:
-    def __init__(self, ticket_ok, ticket_space):
+    def __init__(self, ticket_ok, ticket_space, ticket_blacklist):
         self.ticket_ok = ticket_ok
         self.ticket_space = ticket_space
+        self.ticket_blacklist = ticket_blacklist
 
         self.url = f''
 
@@ -24,3 +25,6 @@ class Tickets:
 
     def not_space(self, order):
         return self.ticket(self.ticket_space, order)
+
+    def blacklist(self, order):
+        return self.ticket(self.ticket_blacklist, order)
