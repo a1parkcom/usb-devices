@@ -1,18 +1,23 @@
-PWD:=$(shell pwd)
+
 KERNEL_VER:=$(shell uname -r)
 KERNEL_DIR:=/lib/modules/$(KERNEL_VER)/build
-INSTALL_DIR:=/lib/modules/$(KERNEL_VER)/kernel/drivers/usb/ttyPos
+INSTALL_DIR:=/lib/modules/$(KERNEL_VER)/ttyPos
 
 obj-m := ttyPos.o
 
+
 all:
-	$(MAKE) modules -C $(KERNEL_DIR) M=$(PWD)
+	$(MAKE) modules -C $(KERNEL_DIR) M=$(shell pwd)
+
 clean:
-	$(MAKE) modules -C $(KERNEL_DIR) M=$(PWD) clean
-install:
+	$(RM) *.o *.ko *.mod.* .*.cmd *~
+	$(RM) -r .tmp_versions
+	$(RM) *.order *.symvers
+install: all
 	install -D -m 644 ttyPos.ko $(INSTALL_DIR)/ttyPos.ko
-	depmod -a
+	/sbin/depmod -a
 uninstall:
 	modprobe -r ttyPos ; echo -n
 	$(RM) $(INSTALL_DIR)/ttyPos.ko
-	depmod -a
+	/sbin/depmod -a
+
