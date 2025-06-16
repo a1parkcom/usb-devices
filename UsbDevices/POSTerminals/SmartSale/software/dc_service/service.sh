@@ -67,7 +67,6 @@ install()
 	fi
 	chmod +666 "$CONFIG_PATH$CONFIG_FILE_GUI"
 	# copy binary files
-	ls
 	cp $DCCONSOLE.jar $INSTALL_PATH_BIN
 	cp $DCCONSOLE.sh $INSTALL_PATH_BIN$DCCONSOLE
 	chmod +rx $INSTALL_PATH_BIN$DCCONSOLE.jar
@@ -83,9 +82,9 @@ install()
 	cp $DCPOSGUI.jar $INSTALL_PATH_BIN
 	cp $DCPOSGUI.sh $INSTALL_PATH_BIN$DCPOSGUI
 	chmod +rx cp/**
-	chmod +rx files/lib/**
+	chmod +rx lib/**
 	cp -r cp $INSTALL_PATH_BIN
-	cp -r files/lib $INSTALL_PATH_BIN
+	cp -r lib $INSTALL_PATH_BIN
 	chmod +rx $INSTALL_PATH_BIN$DCPOSGUI.jar
 	chmod +rx $INSTALL_PATH_BIN$DCPOSGUI
 	if [ $? -eq 0 ]; then
