@@ -82,9 +82,9 @@ install()
 	cp $DCPOSGUI.jar $INSTALL_PATH_BIN
 	cp $DCPOSGUI.sh $INSTALL_PATH_BIN$DCPOSGUI
 	chmod +rx cp/**
-	chmod +rx lib/**
+	chmod +rx files/lib/**
 	cp -r cp $INSTALL_PATH_BIN
-	cp -r lib $INSTALL_PATH_BIN
+	cp -r files/lib $INSTALL_PATH_BIN
 	chmod +rx $INSTALL_PATH_BIN$DCPOSGUI.jar
 	chmod +rx $INSTALL_PATH_BIN$DCPOSGUI
 	if [ $? -eq 0 ]; then
