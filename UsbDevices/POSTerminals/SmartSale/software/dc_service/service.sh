@@ -5,12 +5,15 @@ SIMPLY_NAME=dcservice
 DCCONSOLE=dcconsole
 DCCONTROL=dccontrol
 DCUPDATER=dcupdater
+DCPOSGUI=dcposgui
 INSTALL_PATH=/usr/local/service/$SIMPLY_NAME/
 INSTALL_PATH_BIN=/usr/local/bin/
 CONFIG_FILE=connector.xml
 CONFIG_PATH=/etc/
 CONFIG_FILE_UP=updater.xml
-CONFIG_PATH_UP=/etc/DCUpdater
+CONFIG_PATH_UP=/etc/DCUpdater/
+CONFIG_FILE_GUI=dcposgui.xml
+
 
 
 # get system init
@@ -55,9 +58,14 @@ install()
 	if [ ! -d $CONFIG_PATH_UP ]; then
 		mkdir -p $CONFIG_PATH_UP 
 	fi
-	if [ ! -f "$CONFIG_PATH_UP/$CONFIG_FILE_UP" ]; then
+	if [ ! -f "$CONFIG_PATH_UP$CONFIG_FILE_UP" ]; then
 		cp $CONFIG_FILE_UP $CONFIG_PATH_UP
 	fi
+	chmod +666 "$CONFIG_PATH_UP$CONFIG_FILE_UP"
+	if [ ! -f "$CONFIG_PATH$CONFIG_FILE_GUI" ]; then
+		cp $CONFIG_FILE_GUI $CONFIG_PATH
+	fi
+	chmod +666 "$CONFIG_PATH$CONFIG_FILE_GUI"
 	# copy binary files
 	cp $DCCONSOLE.jar $INSTALL_PATH_BIN
 	cp $DCCONSOLE.sh $INSTALL_PATH_BIN$DCCONSOLE
@@ -71,6 +79,14 @@ install()
 	cp $DCUPDATER.sh $INSTALL_PATH_BIN$DCUPDATER
 	chmod +rx $INSTALL_PATH_BIN$DCUPDATER.jar
 	chmod +rx $INSTALL_PATH_BIN$DCUPDATER
+	cp $DCPOSGUI.jar $INSTALL_PATH_BIN
+	cp $DCPOSGUI.sh $INSTALL_PATH_BIN$DCPOSGUI
+	chmod +rx cp/**
+	chmod +rx lib/**
+	cp -r cp $INSTALL_PATH_BIN
+	cp -r lib $INSTALL_PATH_BIN
+	chmod +rx $INSTALL_PATH_BIN$DCPOSGUI.jar
+	chmod +rx $INSTALL_PATH_BIN$DCPOSGUI
 	if [ $? -eq 0 ]; then
 		case $initSystem in
 			1)
@@ -129,6 +145,8 @@ uninstall()
 	rm $INSTALL_PATH_BIN$DCCONTROL
 	rm $INSTALL_PATH_BIN$DCUPDATER.jar
 	rm $INSTALL_PATH_BIN$DCUPDATER
+	rm $INSTALL_PATH_BIN$DCPOSGUI.jar
+	rm $INSTALL_PATH_BIN$DCPOSGUI
 	#rm $CONFIG_PATH$CONFIG_FILE 
 }
 
@@ -166,5 +184,4 @@ else
 		;;
 	esac 
 fi
-
 

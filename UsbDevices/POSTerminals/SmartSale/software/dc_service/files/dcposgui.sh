@@ -56,7 +56,7 @@ case "`uname`" in
     ;;
 esac
 
-CLASSPATH="$APP_HOME/cp/asm-3.0.jar:$APP_HOME/cp/asm-commons-3.0.jar:$APP_HOME/cp/asm-tree-3.0.jar:$APP_HOME/cp/forms-1.1-preview.jar:$APP_HOME/cp/forms_rt-7.0.3.jar:$APP_HOME/cp/jdom-1.0.jar:$APP_HOME/dcupdater.jar"
+CLASSPATH="$APP_HOME/cp/asm-3.0.jar:$APP_HOME/cp/asm-commons-3.0.jar:$APP_HOME/cp/asm-tree-3.0.jar:$APP_HOME/cp/forms-1.1-preview.jar:$APP_HOME/cp/forms_rt-7.0.3.jar:$APP_HOME/cp/jdom-1.0.jar:$APP_HOME/dcposgui.jar"
 
 MODULE_PATH=$APP_HOME/lib
 
@@ -163,9 +163,9 @@ save () {
 }
 APP_ARGS=`save "$@"`
 if [[ "$JAVAVER" -ge 100 ]]; then
-    eval set -- $DEFAULT_JVM_OPTS $JAVA_OPTS $DC_POSGUI_OPTS --module-path "\"$MODULE_PATH\"" --add-modules "javafx.controls,com.sun.xml.bind" -classpath "\"$CLASSPATH\"" ru.inpas.dcupdater.MainApplication "$APP_ARGS"
+    eval set -- $DEFAULT_JVM_OPTS $JAVA_OPTS $DC_POSGUI_OPTS --module-path "\"$MODULE_PATH\"" --add-modules "javafx.controls,com.sun.xml.bind" -classpath "\"$CLASSPATH\"" ru.inpas.DCPosGUI.Launcher "$APP_ARGS"
 else         
-    eval set -- $DEFAULT_JVM_OPTS $JAVA_OPTS $DC_POSGUI_OPTS -classpath "\"$CLASSPATH\"" ru.inpas.dcupdater.MainApplication "$APP_ARGS"
+    eval set -- $DEFAULT_JVM_OPTS $JAVA_OPTS $DC_POSGUI_OPTS -classpath "\"$CLASSPATH\"" ru.inpas.DCPosGUI.Launcher "$APP_ARGS"
 fi
 # Collect all arguments for the java command, following the shell quoting and substitution rules
 
