@@ -67,6 +67,7 @@ install()
 	fi
 	chmod +666 "$CONFIG_PATH$CONFIG_FILE_GUI"
 	# copy binary files
+	ls
 	cp $DCCONSOLE.jar $INSTALL_PATH_BIN
 	cp $DCCONSOLE.sh $INSTALL_PATH_BIN$DCCONSOLE
 	chmod +rx $INSTALL_PATH_BIN$DCCONSOLE.jar
