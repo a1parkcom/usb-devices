@@ -1,0 +1,14 @@
+[Unit]
+Description=WIFI AP
+
+[Service]
+Type=simple
+
+Restart=always
+RestartSec=1
+
+WorkingDirectory=/home/pi/usb-devices/WIFI-AP
+ExecStart=/usr/bin/sudo ./lnxrouter  --ap wlan0 FreePint -p none1234
+
+[Install]
+WantedBy=multi-user.target
