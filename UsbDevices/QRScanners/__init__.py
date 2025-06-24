@@ -1,8 +1,8 @@
 import logging
-import time
 from typing import TextIO
 from threading import Thread
 
+import aioserial
 import serial
 
 from .ABC import QRScannerABC, TypeConnect
@@ -37,8 +37,36 @@ class SerialBase(QRScannerABC):
         self.ser.close()
 
 
+class AIOSerialBase(QRScannerABC):
+    def __init__(self, port: str, baudrate=9600, timeout=0):
+        self.ser = aioserial.AioSerial(port,
+                                  baudrate=baudrate,
+                                  parity=serial.PARITY_NONE,
+                                  stopbits=serial.STOPBITS_ONE,
+                                  bytesize=serial.EIGHTBITS,
+                                  timeout=timeout)
+
+    async def read(self, size=None) -> str:
+        try:
+            data = (await self.ser.readline_async(size)).decode(errors='ignore').strip()
+            if data:
+                return data[data[0] != 'h'::]
+        except:
+            pass
+        return ''
+
+    def is_open(self) -> bool:
+        return self.ser.is_open
+
+    def open(self):
+        self.ser.open()
+
+    def close(self):
+        self.ser.close()
+
+
 class HIDPOSBase(QRScannerABC):
-    def __init__(self, file_path: str='/dev/hidraw0'):
+    def __init__(self, file_path: str = '/dev/hidraw0'):
         self.file_path = file_path
 
         self.f: TextIO = self.open()
@@ -102,7 +130,7 @@ class HIDPOSEventBase(QRScannerABC):
 
 
 class TestScanner(QRScannerABC):
-    def __init__(self, file_path: str='scannerdata'):
+    def __init__(self, file_path: str = 'scannerdata'):
         self.file_path = file_path
 
         self.f: TextIO = self.open()
@@ -139,6 +167,28 @@ class Scanner(Thread):
         self.scanner.close()
 
         print('Scanner connection closed, thread stopped')
+
+    def code(self) -> str:
+        return self.qr_code
+
+
+class AsyncScanner(Thread):
+    def __init__(self, scanner: AIOSerialBase, func=None):
+        super(AsyncScanner, self).__init__()
+        self.scanner = scanner
+        self.qr_code = ''
+        self.func = func
+        self.is_alive = True
+
+    async def run(self):
+        while self.scanner.is_open() and self.is_alive:
+            self.qr_code = await self.scanner.read()
+            if isinstance(self.qr_code, str) and self.qr_code:
+                if callable(self.func):
+                    self.func(self.qr_code)
+
+    def stop(self):
+        self.is_alive = False
 
     def code(self) -> str:
         return self.qr_code
