@@ -184,8 +184,7 @@ class AsyncScanner(Thread):
         while self.scanner.is_open() and self.is_alive:
             self.qr_code = await self.scanner.read()
             if isinstance(self.qr_code, str) and self.qr_code:
-                if callable(self.func):
-                    self.func(self.qr_code)
+                await self.func(self.qr_code)
 
     def stop(self):
         self.is_alive = False
