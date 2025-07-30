@@ -72,7 +72,9 @@ class VKP80II(Usb):
                        'R' Retract ticket
                 • 'out_delay' indicates the timeout for the ticket present (1 = 1 second)
         """
-        self.raw_decimal([28, 80, steps, int(blink), ord(out), out_delay])
+        # self.raw_decimal([28, 80, steps, int(blink), ord(out), out_delay])
+
+        self.raw_decimal([29, 101, 32, out_delay])
 
     def retract(self):
         self.raw_decimal([29, 101, 2])
