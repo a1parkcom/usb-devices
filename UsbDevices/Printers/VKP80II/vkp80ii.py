@@ -74,7 +74,7 @@ class VKP80II(Usb):
         """
         # self.raw_decimal([28, 80, steps, int(blink), ord(out), out_delay])
 
-        self.raw_decimal([29, 101, 32, out_delay])
+        self.raw_decimal([29, 101, 32, steps, out_delay])
 
     def retract(self):
         self.raw_decimal([29, 101, 2])
