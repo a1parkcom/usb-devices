@@ -1,9 +1,10 @@
 import logging
-from typing import TextIO
 from threading import Thread
+from typing import TextIO
 
 import aioserial
 import serial
+from websockets.sync.client import connect, ClientConnection
 
 from .ABC import QRScannerABC, TypeConnect
 from .encodings import Mindeo
@@ -40,11 +41,11 @@ class SerialBase(QRScannerABC):
 class AIOSerialBase(QRScannerABC):
     def __init__(self, port: str, baudrate=9600, timeout=0):
         self.ser = aioserial.AioSerial(port,
-                                  baudrate=baudrate,
-                                  parity=serial.PARITY_NONE,
-                                  stopbits=serial.STOPBITS_ONE,
-                                  bytesize=serial.EIGHTBITS,
-                                  timeout=timeout)
+                                       baudrate=baudrate,
+                                       parity=serial.PARITY_NONE,
+                                       stopbits=serial.STOPBITS_ONE,
+                                       bytesize=serial.EIGHTBITS,
+                                       timeout=timeout)
 
     async def read(self, size=None) -> str:
         try:
@@ -193,6 +194,36 @@ class AsyncScanner(Thread):
         return self.qr_code
 
 
+class WebSocketScanner(QRScannerABC):
+    def __init__(self, addr):
+        self.addr = addr
+        self._is_open = False
+        self._connect: ClientConnection = None
+        self.open()
+
+    def open(self):
+        self.close()
+        self._connect = connect(self.addr)
+        self._is_open = True
+
+    def close(self):
+        if self._connect is not None:
+            self._connect.close()
+        self._is_open = False
+
+    def is_open(self) -> bool:
+        return self._is_open
+
+    def read(self, *args, **kwargs) -> str:
+        if not self.is_open():
+            return ""
+        try:
+            data = self._connect.recv()
+            return f"{data}"
+        except TimeoutError:
+            return ""
+
+
 if __name__ == '__main__':
-    sc = HIDPOSBase('/dev/hidraw1')
+    sc = WebSocketScanner('ws://89.17.56.214:7878/scanner/ws')
     print(sc.read())

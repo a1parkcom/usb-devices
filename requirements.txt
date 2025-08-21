@@ -5,3 +5,4 @@ lxml
 beautifulsoup4==4.11.1
 pyuac==0.0.3
 aioserial
+websockets
