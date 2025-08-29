@@ -151,16 +151,17 @@ class TestScanner(QRScannerABC):
 
 
 class Scanner(Thread):
-    def __init__(self, scanner: QRScannerABC, func=None):
+    def __init__(self, scanner: QRScannerABC, func=None, size=None):
         super(Scanner, self).__init__()
         self.scanner = scanner
         self.qr_code = ''
         self.func = func
+        self.size = size
         self.start()
 
     def run(self):
         while self.is_alive() and self.scanner.is_open():
-            self.qr_code = self.scanner.read()
+            self.qr_code = self.scanner.read(self.size)
             if isinstance(self.qr_code, str) and self.qr_code:
                 if callable(self.func):
                     self.func(self.qr_code)
@@ -174,16 +175,17 @@ class Scanner(Thread):
 
 
 class AsyncScanner(Thread):
-    def __init__(self, scanner: AIOSerialBase, func=None):
+    def __init__(self, scanner: AIOSerialBase, func=None, size=None):
         super(AsyncScanner, self).__init__()
         self.scanner = scanner
         self.qr_code = ''
         self.func = func
         self.is_alive = True
+        self.size = size
 
     async def run(self):
         while self.scanner.is_open() and self.is_alive:
-            self.qr_code = await self.scanner.read()
+            self.qr_code = await self.scanner.read(self.size)
             if isinstance(self.qr_code, str) and self.qr_code:
                 await self.func(self.qr_code)
 
