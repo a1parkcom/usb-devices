@@ -30,8 +30,8 @@ class Printer(VKP80III, HTMLtoPOS):
     @log_on_end(logging.DEBUG, "Ожидание взятия чека завершилось с {result}")
     def isTakeCheque(self, time_: int) -> bool:
         start_time = time.perf_counter() + time_
-
         if self.waitTicketState(PaperStatus.ticket_present, start_time):
+            time.sleep(0.5)
             return self.waitTicketState(PaperStatus.not_ticket_present, start_time)
         return False
 
