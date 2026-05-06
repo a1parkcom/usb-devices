@@ -197,15 +197,17 @@ class AsyncScanner(Thread):
 
 
 class WebSocketScanner(QRScannerABC):
-    def __init__(self, addr):
+    def __init__(self, addr, additional_headers: dict = None):
         self.addr = addr
+        self.additional_headers = additional_headers
+
         self._is_open = False
         self._connect: ClientConnection = None
         self.open()
 
     def open(self):
         self.close()
-        self._connect = connect(self.addr)
+        self._connect = connect(self.addr, additional_headers=self.additional_headers)
         self._is_open = True
 
     def close(self):
