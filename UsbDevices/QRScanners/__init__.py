@@ -23,7 +23,7 @@ class SerialBase(QRScannerABC):
         try:
             data = self.ser.readline(size).decode('utf-8').strip()
             if data:
-                return data[data[0] != 'h'::]
+                return data
         except:
             pass
         return ''
@@ -51,7 +51,7 @@ class AIOSerialBase(QRScannerABC):
         try:
             data = (await self.ser.readline_async(size)).decode(errors='ignore').strip()
             if data:
-                return data[data[0] != 'h'::]
+                return data
         except:
             pass
         return ''
